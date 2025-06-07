@@ -6,11 +6,10 @@ output: html_document
 
 ```{r setup, message=FALSE}
 library(tidyverse)
+library(lubridate)
 library(here)
-library(gt) 
-library(janitor)
-library(readxl)
-library(dplyr)
+
+sst <- read_csv(here("data", "SST_upadate2023.csv"))
 ```
 
 1a. 
@@ -22,6 +21,10 @@ In part 1, they used a pearson correlation test to compare the relationship betw
 Part 1: We found that total nitrogen load tends to increase with distance from headwater, suggesting that agricultural runoff accumulates downstream. Using the Pearson correlation test were r = correlation coefficient, p = 0.03, and α = significance level. 
 Part 2: We found that average nitrogen load varied significantly among sources, with fertilizer and wastewater treatment appearing to contirbute more nitrogen loads than grasslands or atmospheric deposition. Using the statistical test of a one-way ANOVA were F = test statistic, df = degrees of freedom, p = 0.02, α = significance level.
 
+2a.
+```{r}
+
+```
 
 
 
