@@ -44,6 +44,35 @@ sst_clean %>%
 str(sst_clean)
 ```
 
+2b.
+```{r}
+
+#Filter only 2018-2023
+sst_subset <- sst_clean %>%
+  filter(year %in% c("2018", "2019", "2020", "2021", "2022", "2023"))
+
+#Graph
+ggplot(sst_subset, aes(x = month, y = mean_monthly_sst, group = year, color = year)) +
+  #Line and point geometry
+  geom_line(linewidth = 0.5) +
+  geom_point(size = 2) +
+  # Axis labels
+  labs(
+    x = "Month",
+    y = "Mean monthly sea surface temperature (°C)",
+    color = "Year"
+  ) +
+  #Gradient from light blue to dark blue
+  scale_color_manual(
+    values = colorRampPalette(c("lightblue", "darkblue"))(6)
+  ) +
+  
+  #Legend inside the panel + theme
+  theme_classic() +
+  theme(
+    legend.position = c(0.15, 0.7),  
+  )
+```
 
 
 
