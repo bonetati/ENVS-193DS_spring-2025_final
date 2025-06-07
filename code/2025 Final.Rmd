@@ -15,3 +15,12 @@ library(dplyr)
 
 1a. 
 In part 1, they used a correlation test to compare the relationship between distance from head water and annual total nitrogen load. In part 2, they used a one-way ANOVA to test differences in mean annual nitrogen load between five different sources, urban land, atmospheric deposition, fertilizer, waste water treatment, and grasslands.
+
+1b. To learn more information we could do a post-hoc pairwise comparison test which would identify which of the specific sources differ significantly from each other in average nitrogen load. The second piece of information that would be useful to to have is the group means and standard deviations for each nitrogen source since this would help better understand the differences in nitrogen load between sources. This is important as it provides biological context.
+
+1c
+
+
+
+
+
