@@ -1,0 +1,14 @@
+---
+title: "2025 Final"
+subtitle: "https://github.com/bonetati/ENVS-193DS_spring-2025_final"
+output: html_document
+---
+
+```{r setup, message=FALSE}
+library(tidyverse)
+library(here)
+library(gt) 
+library(janitor)
+library(readxl)
+library(dplyr)
+```
