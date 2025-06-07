@@ -6,10 +6,9 @@ output: html_document
 
 ```{r setup, message=FALSE}
 library(tidyverse)
-library(lubridate)
 library(here)
 
-sst <- read_csv(here("data", "SST_upadate2023.csv"))
+sst <- read_csv(here("data", "SST_update2023.csv"))
 ```
 
 1a. 
@@ -23,7 +22,26 @@ Part 2: We found that average nitrogen load varied significantly among sources, 
 
 2a.
 ```{r}
+# Clean/summarize the data
+sst_clean <- sst %>%
+  # Convert date column to Date object
+  mutate(date = ymd(date), 
+         # Extract year,convert to a factor
+         year = factor(year(date)), 
+          # Extract the month, abbreviate and make ordered factor
+         month = factor(month(date, label = TRUE, abbr = TRUE), 
+                        levels = month.abb, ordered = TRUE)) %>%
+  # Group by year and month
+  group_by(year, month) %>%
+  # Mean sea surface temperature for each group
+  summarize(mean_monthly_sst = mean(temp, na.rm = TRUE), .groups = "drop")
 
+#Display 5 random rows
+sst_clean %>%
+  slice_sample(n = 5)
+
+#Show structure
+str(sst_clean)
 ```
 
 
