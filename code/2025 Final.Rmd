@@ -12,3 +12,6 @@ library(janitor)
 library(readxl)
 library(dplyr)
 ```
+
+1a. 
+In part 1, they used a correlation test to compare the relationship between distance from head water and annual total nitrogen load. In part 2, they used a one-way ANOVA to test differences in mean annual nitrogen load between five different sources, urban land, atmospheric deposition, fertilizer, waste water treatment, and grasslands.
