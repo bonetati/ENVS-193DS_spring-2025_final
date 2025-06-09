@@ -11,17 +11,7 @@ Stojanovic, D., Owens, G., Young, C. M., Alves, F., & Heinsohn, R. (2021). *Do n
 This repository demonstrates fitting generalized linear models with categorical and continuous predictors, model selection using AIC, and visualizing model predictions for a binary response variable (nest box occupancy).
 
 ## Data and file overview
-│   .gitignore
-│   ENVS-193DS_spring-2025_final.Rproj
-│   README.md
-│
-├───code
-│       2025 Final.Rmd
-│       2025-Final.html
-│
-└───data
-        occdist.csv
-        SST_update2023.csv
+<pre> . │ .gitignore │ ENVS-193DS_spring-2025_final.Rproj │ README.md │ ├───code │ 2025 Final.Rmd │ 2025-Final.html │ └───data occdist.csv SST_update2023.csv </pre>
 
 ## Rendered output
 [My rendered final project output](code/2025-Final.html)
