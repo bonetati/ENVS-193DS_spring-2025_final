@@ -7,8 +7,11 @@ output: html_document
 ```{r setup, message=FALSE}
 library(tidyverse)
 library(here)
+library(DHARMa)
+library(MuMIn)
 
 sst <- read_csv(here("data", "SST_update2023.csv"))
+occdist <- read_csv("data/occdist.csv")
 ```
 
 1a. 
@@ -74,6 +77,40 @@ ggplot(sst_subset, aes(x = month, y = mean_monthly_sst, group = year, color = ye
   )
 ```
 
+
+3a.
+The response variable is Swift Parrot nest box occupancy, where 1 indicates that a nest box was occupied by a Swift Parrot and 0 indicates that it was not occupied. 
+
+3b.
+Swift Parrots are a critically endangered species, while Common Starlings and Tree Martins are not. The study compares these species to determine whether artificial nest boxes are successful in supporting the conservation of Swift Parrots or unintentionally favoring the non-endagered species.
+
+3c.
+The two seasons refer to data collected in 2016 and 2019. In 2016, Swift Parrots were known to be breeding in the area of study, while in 2019, they were not. This difference changes the availability and competition for nest boxes.
+
+3d.
+| Model number | Season                 | Distance to forest edge | Model description                   |
+| ------------ | ---------------------- | ----------------------- | ----------------------------------- |
+| 1            | Not included           | Not included            | Null model                          |
+| 2            | Included               | Included                | Saturated model (season + distance) |
+| 3            | Included               | Not included            | Season only model                   |
+| 4            | Not included           | Included                | Distance only model                 |
+
+3e.
+```{r}
+
+#Clean data
+ occdist <- occdist|>
+  mutate(
+    season = factor(season),
+    sp = as.numeric(sp)
+  )
+
+#Run models
+mod1 <- glm(sp ~ 1, data = occdist, family = binomial) #Null model
+mod2 <- glm(sp ~ season + `edge distance`, data = occdist, family = binomial) #Saturated model
+mod3 <- glm(sp ~ season, data = occdist, family = binomial) #Season only
+mod4 <- glm(sp ~ `edge distance`, data = occdist, family = binomial) #Distance only
+```
 
 
 
