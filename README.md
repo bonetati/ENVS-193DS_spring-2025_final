@@ -14,5 +14,5 @@ This repository demonstrates fitting generalized linear models with categorical 
 <pre> . │ .gitignore │ ENVS-193DS_spring-2025_final.Rproj │ README.md │ ├───code │ 2025 Final.Rmd │ 2025-Final.html │ └───data occdist.csv SST_update2023.csv </pre>
 
 ## Rendered output
-[My rendered final project output]([docs/2025-Final.html](https://github.com/bonetati/ENVS-193DS_spring-2025_final))
+[My rendered final project output]([[docs/2025-Final.html](https://github.com/bonetati/ENVS-193DS_spring-2025_final)](https://bonetati.github.io/ENVS-193DS_spring-2025_final/2025-Final.html))
 
