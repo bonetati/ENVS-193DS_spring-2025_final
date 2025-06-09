@@ -1,4 +1,4 @@
-# ENVS 193DS, Final Project Problem 3  
+# ENVS 193DS, Final Project 
 **Spring 2025**
 
 ## General information  
@@ -11,15 +11,18 @@ Stojanovic, D., Owens, G., Young, C. M., Alves, F., & Heinsohn, R. (2021). *Do n
 This repository demonstrates fitting generalized linear models with categorical and continuous predictors, model selection using AIC, and visualizing model predictions for a binary response variable (nest box occupancy).
 
 ## Data and file overview
-```{r file-structure}
-list.files(path = ".", recursive = TRUE)
----
+│   .gitignore
+│   ENVS-193DS_spring-2025_final.Rproj
+│   README.md
+│
+├───code
+│       2025 Final.Rmd
+│       2025-Final.html
+│
+└───data
+        occdist.csv
+        SST_update2023.csv
 
-## Packages  
-```r
-library(tidyverse)   # data wrangling and plotting  
-library(janitor)     # cleaning column names  
-library(here)        # file path consistency  
-library(DHARMa)      # model diagnostics  
-library(MuMIn)       # model selection (AIC)  
-library(ggeffects)   # generating predicted values and confidence intervals  
+## Rendered output
+[My rendered final project output](code/2025-Final.html)
+
