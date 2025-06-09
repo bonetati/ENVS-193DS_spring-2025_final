@@ -1,7 +1,15 @@
 ---
 title: "2025 Final"
 subtitle: "https://github.com/bonetati/ENVS-193DS_spring-2025_final"
-output: html_document
+author: "Max Bonetati"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: false
+    theme: journal
 ---
 
 ```{r setup, message=FALSE}
@@ -15,16 +23,17 @@ sst <- read_csv(here("data", "SST_update2023.csv"))
 occdist <- read_csv(here("data/occdist.csv"))
 ```
 
-1a. 
+## 1a. 
 In part 1, they used a pearson correlation test to compare the relationship between distance from head water and annual total nitrogen load. In part 2, they used a one-way ANOVA to test differences in mean annual nitrogen load between five different sources, urban land, atmospheric deposition, fertilizer, waste water treatment, and grasslands.
 
-1b. To learn more information we could do a post-hoc pairwise comparison test which would identify which of the specific sources differ significantly from each other in average nitrogen load. The second piece of information that would be useful to to have is the group means and standard deviations for each nitrogen source since this would help better understand the differences in nitrogen load between sources. This is important as it provides biological context.
+## 1b. 
+To learn more information we could do a post-hoc pairwise comparison test which would identify which of the specific sources differ significantly from each other in average nitrogen load. The second piece of information that would be useful to to have is the group means and standard deviations for each nitrogen source since this would help better understand the differences in nitrogen load between sources. This is important as it provides biological context.
 
-1c.
+## 1c.
 Part 1: We found that total nitrogen load tends to increase with distance from headwater, suggesting that agricultural runoff accumulates downstream. Using the Pearson correlation test were r = correlation coefficient, p = 0.03, and α = significance level. 
 Part 2: We found that average nitrogen load varied significantly among sources, with fertilizer and wastewater treatment appearing to contirbute more nitrogen loads than grasslands or atmospheric deposition. Using the statistical test of a one-way ANOVA were F = test statistic, df = degrees of freedom, p = 0.02, α = significance level.
 
-2a.
+## 2a.
 ```{r}
 # Clean/summarize the data
 sst_clean <- sst %>%
@@ -48,8 +57,8 @@ sst_clean %>%
 str(sst_clean)
 ```
 
-2b.
-```{r}
+## 2b.
+```{r, , message=FALSE, warning=FALSE}
 
 #Filter only 2018-2023
 sst_subset <- sst_clean %>%
@@ -79,16 +88,16 @@ ggplot(sst_subset, aes(x = month, y = mean_monthly_sst, group = year, color = ye
 ```
 
 
-3a.
+## 3a.
 The response variable is Swift Parrot nest box occupancy, where 1 indicates that a nest box was occupied by a Swift Parrot and 0 indicates that it was not occupied. 
 
-3b.
+## 3b.
 Swift Parrots are a critically endangered species, while Common Starlings and Tree Martins are not. The study compares these species to determine whether artificial nest boxes are successful in supporting the conservation of Swift Parrots or unintentionally favoring the non-endagered species.
 
-3c.
+## 3c.
 The two seasons refer to data collected in 2016 and 2019. In 2016, Swift Parrots were known to be breeding in the area of study, while in 2019, they were not. This difference changes the availability and competition for nest boxes.
 
-3d.
+## 3d.
 | Model number | Season                 | Distance to forest edge | Model description                   |
 | ------------ | ---------------------- | ----------------------- | ----------------------------------- |
 | 1            | Not included           | Not included            | Null model                          |
@@ -96,7 +105,7 @@ The two seasons refer to data collected in 2016 and 2019. In 2016, Swift Parrots
 | 3            | Included               | Not included            | Season only model                   |
 | 4            | Not included           | Included                | Distance only model                 |
 
-3e.
+## 3e.
 ```{r}
 #Clean data
  occdist <- occdist|>
@@ -113,7 +122,7 @@ mod3 <- glm(sp ~ season, data = occdist, family = binomial) #Season only
 mod4 <- glm(sp ~ edge_distance, data = occdist, family = binomial) #Distance only
 ```
 
-3f.
+## 3f.
 ```{r}
 #Simulate residuals for each model
 res1 <- simulateResiduals(mod1)
@@ -129,14 +138,14 @@ plotResiduals(res4)
 
 ```
 
-3g.
+## 3g.
 ```{r}
 #Compare four models using AIC
 model.sel(mod1, mod2, mod3, mod4)
 ```
 The best model as determined by Akaike’s Information Criterion was the model that included both season and distance to forest edge as predictors of Swift Parrot nest box occupancy. This model had the lowest AICc value (226.3) and the highest model weight (0.837), showing it is the most supported model among those considered. In contrast, simpler models that included only season or only distance had higher AICc values.
 
-3h.
+## 3h.
 ```{r}
 #Generate from the best model
 pred <- ggpredict(mod2, terms = c("edge_distance [0:900 by=50]", "season")) |>
@@ -174,12 +183,12 @@ ggplot() +
   theme_minimal()
 ```
 
-3i.
+## 3i.
 **Figure 1. Probability of Swift Parrot nest box occupancy across forest edge distance in 2016 and 2019.**  
 This figure shows model-predicted probabilities of Swift Parrot nest box occupancy as a function of distance from the forest edge for the 2016 and 2019 breeding seasons. Lines represent predictions from a logistic regression including both season and distance as predictors. The shaded ribbons indicate 95% confidence intervals. Jittered points show observed occupancy data, either 1 or 0.
 **Data source:** Stojanovic, Dejan et al. (2021). *Do nest boxes breed the target species or its competitors?* Dryad. https://doi.org/10.5061/dryad.83bk3j9sb
 
-3j.
+## 3j.
 ```{r}
 # Create new data frame for predictions
 newdata <- expand.grid(
@@ -200,10 +209,11 @@ newdata
 
 ```
 
-3k.
+## 3k.
 Based on the model predictions, Swift Parrot nest box occupancy was highest near the forest edge and decreased when further away. In 2016, the predicted probability of occupancy was 0.48 at 0 meters and dropped to 0.12 at 900 meters. In 2019, occupancy was lower overall, with a probability of 0.30 at the forest edge and just 0.06 farther away. This shows a consistent negative relationship between distance from forest edge and nest box use. Biologically, this trend reflects the Swift Parrot's patterns for nesting near forest edges. This is because it is where foraging opportunities and protective cover are more abundant.
 
-
+## 4a.
+The exploratory visualization from Homework 2 uses a traditional box plot to represent stress level distributions by day of the week. In contrast, the effective visualization from Homework 3 uses abstract visuals to show the data in a more artistic way. Both visualizations group data by day of the week and try to show differences in stress levels across time. They use consistent categorical variables and try to display weekly patterns, even though they vary visualy. The box plot clearly shows that Monday has the highest median stress level, while Saturday has the lowest. This pattern is also reflected in the effective visualization, where the radial shapes for Monday appear larger compared to Saturday. While the effective visualization is more abstract, it shows the same general trends, just with less emphasis on specific measurement.
 
 
 
