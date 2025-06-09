@@ -9,9 +9,10 @@ library(tidyverse)
 library(here)
 library(DHARMa)
 library(MuMIn)
+library(ggeffects)
 
 sst <- read_csv(here("data", "SST_update2023.csv"))
-occdist <- read_csv("data/occdist.csv")
+occdist <- read_csv(here("data/occdist.csv"))
 ```
 
 1a. 
@@ -97,9 +98,9 @@ The two seasons refer to data collected in 2016 and 2019. In 2016, Swift Parrots
 
 3e.
 ```{r}
-
 #Clean data
  occdist <- occdist|>
+  rename(edge_distance = `edge distance`) |>
   mutate(
     season = factor(season),
     sp = as.numeric(sp)
@@ -107,14 +108,100 @@ The two seasons refer to data collected in 2016 and 2019. In 2016, Swift Parrots
 
 #Run models
 mod1 <- glm(sp ~ 1, data = occdist, family = binomial) #Null model
-mod2 <- glm(sp ~ season + `edge distance`, data = occdist, family = binomial) #Saturated model
+mod2 <- glm(sp ~ season + edge_distance, data = occdist, family = binomial) #Saturated model
 mod3 <- glm(sp ~ season, data = occdist, family = binomial) #Season only
-mod4 <- glm(sp ~ `edge distance`, data = occdist, family = binomial) #Distance only
+mod4 <- glm(sp ~ edge_distance, data = occdist, family = binomial) #Distance only
 ```
 
+3f.
+```{r}
+#Simulate residuals for each model
+res1 <- simulateResiduals(mod1)
+res2 <- simulateResiduals(mod2)
+res3 <- simulateResiduals(mod3)
+res4 <- simulateResiduals(mod4)
 
+#Plot residuals for each model
+plotResiduals(res1)
+plotResiduals(res2)
+plotResiduals(res3)
+plotResiduals(res4)
 
+```
 
+3g.
+```{r}
+#Compare four models using AIC
+model.sel(mod1, mod2, mod3, mod4)
+```
+The best model as determined by Akaike’s Information Criterion was the model that included both season and distance to forest edge as predictors of Swift Parrot nest box occupancy. This model had the lowest AICc value (226.3) and the highest model weight (0.837), showing it is the most supported model among those considered. In contrast, simpler models that included only season or only distance had higher AICc values.
+
+3h.
+```{r}
+#Generate from the best model
+pred <- ggpredict(mod2, terms = c("edge_distance [0:900 by=50]", "season")) |>
+  rename(distance = x, season = group)
+
+#Plot
+ggplot() +
+  #Underlying observed data
+  geom_point(data = occdist,
+             aes(x = edge_distance, y = sp, color = season),
+             alpha = 0.6,
+             position = position_jitter(height = 0.01)) +
+  
+  #Predicted probability lines
+  geom_line(data = pred,
+            aes(x = distance, y = predicted, color = season),
+            linewidth = 1.2) +
+  
+  #Confidence intervals
+  geom_ribbon(data = pred,
+              aes(x = distance, ymin = conf.low, ymax = conf.high, fill = season),
+              alpha = 0.2, color = NA) +
+  
+  #Axis labels
+  labs(
+    x = "Distance from forest edge (m)",
+    y = "Probability of Swift Parrot nest box occupancy"
+  ) +
+  
+  #Colors
+  scale_color_manual(values = c("2016" = "#eb3468", "2019" = "#3474eb")) +
+  scale_fill_manual(values = c("2016" = "#eb3468", "2019" = "#3474eb")) +
+
+  #Minimal theme and remove gridlines
+  theme_minimal()
+```
+
+3i.
+**Figure 1. Probability of Swift Parrot nest box occupancy across forest edge distance in 2016 and 2019.**  
+This figure shows model-predicted probabilities of Swift Parrot nest box occupancy as a function of distance from the forest edge for the 2016 and 2019 breeding seasons. Lines represent predictions from a logistic regression including both season and distance as predictors. The shaded ribbons indicate 95% confidence intervals. Jittered points show observed occupancy data, either 1 or 0.
+**Data source:** Stojanovic, Dejan et al. (2021). *Do nest boxes breed the target species or its competitors?* Dryad. https://doi.org/10.5061/dryad.83bk3j9sb
+
+3j.
+```{r}
+# Create new data frame for predictions
+newdata <- expand.grid(
+  edge_distance = c(0, 900),
+  season = c("2016", "2019")
+)
+
+# Predict using the best model 
+predictions <- predict(mod2, newdata = newdata, type = "response", se.fit = TRUE)
+
+# Calculate 95% confidence intervals
+newdata$predicted_probability <- predictions$fit
+newdata$lower_CI <- predictions$fit - 1.96 * predictions$se.fit
+newdata$upper_CI <- predictions$fit + 1.96 * predictions$se.fit
+
+# Display 
+newdata
+
+```
+
+3k.
+Based on the model predictions, Swift Parrot nest box occupancy was highest near the forest edge and decreased when further away. In 2016, the predicted probability of occupancy was 0.48 at 0 meters and dropped to 0.12 at 900 meters. In 2019, occupancy was lower overall, with a probability of 0.30 at the forest edge and just 0.06 farther away. This shows a consistent negative relationship between distance from forest edge and nest box use. Biologically, this trend reflects the Swift Parrot's patterns for nesting near forest edges. This is because it is where foraging opportunities and protective cover are more abundant.
 
 
 
